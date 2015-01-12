@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>tempjs.org</h1>
+      <p>tempjs.org is a really tiny website that lets you store small snippets of JavaScript for brief periods of time along with an auto-generated HTML page that just loads that JavaScript file and nothing else.</p>
+      <ul>
+        <li>Only 1MB of JavaScript can be stored per file.</li>
+        <li>Only the most recently used 100 files are kept.</li>
+        <li>All files older than 24 hours are deleted even if they are in use.</li>
+      </ul>
+      <h2>API</h2>
+      <pre><code class="language-javascript">var request = require('then-request');
+request('POST', 'https://tempjs.org/create', {
+  json: {
+    body: "var p = document.createElement('p');\n" +
+          "p.textContent = 'Hello World';\n" +
+          "document.body.appendChild(p);"
+  }
+}).getBody('utf8').then(JSON.parse).done(function (res) {
+  assert(res.id === '36e5035e7b364d50d547c22c5b2ba78c9736acfc');
+  assert(res.path === '/files/36e5035e7b364d50d547c22c5b2ba78c9736acfc/index.html');
+  console.log('https://tempjs.org' + res.path);
+});</code></pre>
+      <pre><code class="language-javascript">var request = require('then-request');
+request('POST', 'https://tempjs.org/create', {
+  json: {
+    body: "$('body').append('&lt;p&gt;Hello World&lt;/p&gt;');",
+    libraries: [ 'https://code.jquery.com/jquery-2.1.3.min.js' ]
+  }
+}).getBody('utf8').then(JSON.parse).done(function (res) {
+  assert(res.id === '875d4cfcbfb3b563523cbd5c6b0ad86eb57d32e2');
+  assert(res.path === '/files/875d4cfcbfb3b563523cbd5c6b0ad86eb57d32e2/index.html');
+  console.log('https://tempjs.org' + res.path);
+});</code></pre>
+      <h2>Try it out!</h2>
+      <form id="fm">
+        <label>Libaries</label>
+        <div id="libraries"></div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-8">
+              <input id="new-library" class="form-control" type="text" placeholder="(e.g. https://code.jquery.com/jquery-1.11.2.min.js)" />
+            </div>
+            <div class="col-md-4">
+              <button id="add-library" class="btn btn-default btn-block">Add Library</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Body</label>
+          <textarea id="js" class="form-control" placeholder="Enter some JavaScript here..." style="min-height: 20em;max-width:100%;">var p = document.createElement('p');
+p.textContent = 'Hello World';
+document.body.appendChild(p);</textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Create</button>
+      </form>
+    </div>
+    <script src="/create.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
+  </body>
+</html>

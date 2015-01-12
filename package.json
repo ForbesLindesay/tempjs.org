@@ -1,0 +1,25 @@
+{
+  "name": "tempjs.org",
+  "version": "0.0.0",
+  "description": "A place to host files for a really brief period of time",
+  "keywords": [],
+  "dependencies": {
+    "body-parser": "^1.10.1",
+    "browserify-middleware": "^4.1.0",
+    "express": "^4.10.7",
+    "lru-cache": "^2.5.0",
+    "mongod": "^1.3.0",
+    "promise": "^6.0.1",
+    "shasum": "^1.0.0",
+    "then-request": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ForbesLindesay/tempjs.org.git"
+  },
+  "author": "ForbesLindesay",
+  "license": "MIT",
+  "host": "tempjs.org"
+}
