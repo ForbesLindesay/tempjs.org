@@ -26,7 +26,7 @@ request('POST', server + '/create', {
     }
   }).getBody('utf8').then(JSON.parse);
 }).done(function (res) {
-  //assert(res.id === '875d4cfcbfb3b563523cbd5c6b0ad86eb57d32e2');
-  //assert(res.path === '/files/875d4cfcbfb3b563523cbd5c6b0ad86eb57d32e2/index.html');
+  assert(res.id === 'b004d8e0501b58b511574b20312656259de9776a');
+  assert(res.path === '/files/b004d8e0501b58b511574b20312656259de9776a/index.html');
   console.log('https://tempjs.org' + res.path);
 });
