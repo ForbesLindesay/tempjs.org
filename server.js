@@ -8,6 +8,7 @@ var LRU = require('lru-cache');
 var shasum = require('shasum');
 var mongod = require('mongod');
 var Promise = require('promise');
+var ajax = require('./lib/ajax');
 
 var db = mongod(process.env.MONGO_DB, ['files']);
 var cache = new LRU({
@@ -19,6 +20,8 @@ var cache = new LRU({
 
 var create = fs.readFileSync(__dirname + '/lib/create.html', 'utf8');
 var app = express();
+
+app.use('/ajax', ajax);
 
 function readDoc(id) {
   var doc = cache.get(id);
