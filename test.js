@@ -1,5 +1,6 @@
 'use strict';
 
+process.env.NODE_ENV = 'production';
 var server = require('./server');
 var assert = require('assert');
 var request = require('then-request');
