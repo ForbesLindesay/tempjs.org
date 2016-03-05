@@ -23,5 +23,8 @@
   },
   "author": "ForbesLindesay",
   "license": "MIT",
-  "host": "tempjs.org"
+  "host": "tempjs.org",
+  "engines": {
+    "node": "5.7.1"
+  }
 }
