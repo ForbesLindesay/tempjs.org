@@ -1,3 +1,10 @@
 language: node_js
+
 node_js:
   - "0.10"
+services:
+  - mongodb
+env:
+  - MONGO_DB="mongodb://localhost/tempjs"
+before_script:
+  - sleep 15

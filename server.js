@@ -6,11 +6,11 @@ var browserify = require('browserify-middleware');
 var body = require('body-parser');
 var LRU = require('lru-cache');
 var shasum = require('shasum');
-var mongod = require('mongod');
+var mongo = require('then-mongo');
 var Promise = require('promise');
 var ajax = require('./lib/ajax');
 
-var db = mongod(process.env.MONGO_DB, ['files']);
+var db = mongo(process.env.MONGO_DB, ['files']);
 var cache = new LRU({
   max: 1024*1024*10,
   length: function (n) {
@@ -167,4 +167,12 @@ function cleanup() {
 }
 cleanup();
 
-app.listen(process.env.PORT || 3000);
+var server = app.listen(process.env.PORT || 3000);
+module.exports = {
+  close: function () {
+    server.close();
+    setTimeout(function () {
+      db.close();
+    }, 2000);
+  },
+};
