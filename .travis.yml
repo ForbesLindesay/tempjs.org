@@ -8,3 +8,12 @@ env:
   - MONGO_DB="mongodb://localhost/tempjs"
 before_script:
   - sleep 15
+
+deploy:
+  provider: heroku
+  app: tempjs
+  on:
+    branch: master
+    node_js: 5.7.1
+  api_key:
+    secure: C6Duz+r8FY5Q+7JgIGfEAQoeHQJ+LSL6UZSM3FIb3E7vSLA9m93dbZ8NzXTjd9ewEQ+7rCUCBfUhv2Ywqa9hR+VAjBOTXniMQjk2Ea4EDQAC66B7L5HwHsGiVVZ6sY5OwgR9OrZipUT6dBQEwBRwM6OcKH8KDWiOBm6eHpxA3c4=
