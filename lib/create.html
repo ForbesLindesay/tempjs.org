@@ -29,7 +29,7 @@ request('POST', 'https://tempjs.org/create', {
       <pre><code class="language-javascript">var request = require('then-request');
 request('POST', 'https://tempjs.org/create', {
   json: {
-      html: '{{styles}}<h1>My Page</h1>{{scripts}}',
+    html: '{{styles}}<h1>My Page</h1>{{scripts}}',
     stylesheets: [ 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css' ],
     style: 'h1 { color: red; }',
     script: "$('body').append('<p>Hello World</p>');",
@@ -63,7 +63,14 @@ document.body.appendChild(p);</textarea>
         </div>
         <button class="btn btn-primary" type="submit">Create</button>
       </form>
+      <h2>Contact Details</h2>
+      <p>If you notice anything wrong with this website, you can contact me at <b id="email"></b>.</p>
     </div>
+    <script>
+      var s="gpscftAmjoeftbz/dp/vl";
+      m=""; for (i=0; i<s.length; i++) {	if(s.charCodeAt(i) == 28){	  m+= '&';} else if (s.charCodeAt(i) == 23) {	  m+= '!';} else {	  m+=String.fromCharCode(s.charCodeAt(i)-1);	}}
+      document.getElementById('email').textContent = m;
+    </script>
     <script src="/create.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
   </body>
