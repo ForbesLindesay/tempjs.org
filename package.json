@@ -15,7 +15,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node test"
+    "test": "node test",
+    "deploy": "npm i heroku-release && heroku-release --app tempjs"
   },
   "repository": {
     "type": "git",
