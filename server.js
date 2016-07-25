@@ -96,7 +96,7 @@ app.get('/', function (req, res, next) {
 });
 function isString(v) { return typeof v === 'string'; }
 app.post('/create',
-         body.json({inflate: true, limit: '1mb'}),
+         body.json({inflate: true, limit: '5mb'}),
          function (req, res, next) {
   if (!req.body) next(new Error('body cannot be null or undefined'));
   var doc = {
