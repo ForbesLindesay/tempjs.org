@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "6.3.1"
+  - "6.4.0"
 services:
   - mongodb
 env:
@@ -14,4 +14,4 @@ deploy:
   script: npm run deploy
   on:
     branch: master
-    node_js: 6.3.1
+    node_js: 6.4.0
