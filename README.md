@@ -1,5 +1,7 @@
 # tempjs.org
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ForbesLindesay/tempjs.org.svg)](https://greenkeeper.io/)
+
 A place to host files for a really brief period of time
 
 [![Build Status](https://img.shields.io/travis/ForbesLindesay/tempjs.org/master.svg)](https://travis-ci.org/ForbesLindesay/tempjs.org)
