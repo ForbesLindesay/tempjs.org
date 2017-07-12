@@ -19,7 +19,7 @@ switch (process.argv[2]) {
     base = 'https://tempjs-staging.herokuapp.com';
     break;
   case 'prod':
-    base = 'https://tempjs.org/';
+    base = 'https://tempjs.org';
     break;
   default:
     console.error('Unrecognised environment ' + process.argv[2]);
