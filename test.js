@@ -1,11 +1,29 @@
 'use strict';
 
 process.env.NODE_ENV = 'production';
-var server = require('./server');
 var assert = require('assert');
 var request = require('then-request');
 
-var base = 'http://localhost:3000';
+var server = null;
+
+if (process.argv[2] === 'local') {
+  server = require('./server');
+}
+
+var base = null;
+switch (process.argv[2]) {
+  case 'local':
+    base = 'http://localhost:3000';
+    break;
+  case 'staging':
+    base = 'https://tempjs-staging.herokuapp.com';
+    break;
+  case 'prod':
+    base = 'https://tempjs.org/';
+    break;
+  default:
+    console.error('Unrecognised environment ' + process.argv[2]);
+}
 
 request('POST', base + '/create', {
   json: {
@@ -31,5 +49,5 @@ request('POST', base + '/create', {
   assert(res.id === 'b004d8e0501b58b511574b20312656259de9776a');
   assert(res.path === '/files/b004d8e0501b58b511574b20312656259de9776a/index.html');
   console.log('https://tempjs.org' + res.path);
-  server.close();
+  if (server) server.close();
 });
