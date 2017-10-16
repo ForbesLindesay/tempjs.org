@@ -8,7 +8,7 @@
     "browserify-middleware": "^7.0.0",
     "express": "^4.10.7",
     "lru-cache": "^4.0.0",
-    "then-mongo": "^2.1.0",
+    "then-mongo": "^3.0.0",
     "promise": "^8.0.0",
     "shasum": "^1.0.0",
     "then-request": "^4.0.0"
