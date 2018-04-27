@@ -29,6 +29,6 @@
   "license": "MIT",
   "host": "tempjs.org",
   "engines": {
-    "node": "9.11.1"
+    "node": "10"
   }
 }
