@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "10.3.0"
+  - "10.8.0"
 services:
   - mongodb
 env:
@@ -15,4 +15,4 @@ deploy:
   script: npm run deploy
   on:
     branch: master
-    node_js: 10.3.0
+    node_js: 10.8.0
