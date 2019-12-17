@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "12.11.1"
+  - "13.4.0"
 services:
   - mongodb
 env:
@@ -15,4 +15,4 @@ deploy:
   script: npm run deploy
   on:
     branch: master
-    node_js: 12.11.1
+    node_js: 13.4.0
