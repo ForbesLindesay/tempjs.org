@@ -10,9 +10,9 @@
       <h1>tempjs.org</h1>
       <p>tempjs.org is a really tiny website that lets you store small snippets of JavaScript for brief periods of time along with an auto-generated HTML page that just loads that JavaScript file and nothing else.</p>
       <ul>
-        <li>Only 1MB of JavaScript can be stored per file.</li>
-        <li>Only the most recently used 100 files are kept.</li>
-        <li>All files older than 24 hours are deleted even if they are in use.</li>
+        <li>Uploads are limited to 5MB in total.</li>
+        <li>Only the most recently used 40MB of files are kept.</li>
+        <li>All file are deleted every 24 hours when the server restarts.</li>
       </ul>
       <h2>API</h2>
       <pre><code class="language-javascript">var request = require('then-request');
@@ -66,6 +66,11 @@ document.body.appendChild(p);</textarea>
       </form>
       <h2>Contact Details</h2>
       <p>If you notice anything wrong with this website, you can contact me at <b id="email"></b>.</p>
+      <h2>Other Projects</h2>
+      <ul>
+        <li><a href="https://rollingversions.com">Rolling Versions</a> - Automate your release process, including setting the correct version & generating release notes.</li>
+        <li><a href="https://www.atdatabases.org/">@databases</a> - Securely connect node.js apps to various SQL databases without learning a new DSL and without being vulnerable to SQL injection.</li>
+      </ul>
     </div>
     <script>
       var s="gpscftAmjoeftbz/dp/vl";
