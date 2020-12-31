@@ -6,13 +6,10 @@ var browserify = require('browserify-middleware');
 var body = require('body-parser');
 var LRU = require('lru-cache');
 var shasum = require('shasum');
-var mongo = require('then-mongo');
-var Promise = require('promise');
 var ajax = require('./lib/ajax');
 
-var db = mongo(process.env.MONGO_DB, ['files']);
 var cache = new LRU({
-  max: 1024*1024*10,
+  max: 1024*1024*40,
   length: function (n) {
     return JSON.stringify(n).length;
   }
@@ -23,73 +20,45 @@ var app = express();
 
 app.use('/ajax', ajax);
 
-function readDoc(id) {
-  var doc = cache.get(id);
-  if (doc === undefined) {
-    return db.files.findOne({_id: id}).done(function (doc) {
-      if (!doc) return;
-      cache.set(id, doc);
-      db.files.update({_id: id}, {
-        '$inc': { 'count': 1 },
-        '$set': { 'accessed': Date.now() }
-      }).done(null, function (err) {
-        console.error(err.stack || err.message);
-      });
-      return doc;
-    });
-  } else {
-    db.files.update({_id: id}, {
-      '$inc': { 'count': 1 },
-      '$set': { 'accessed': Date.now() }
-    }).done(null, function (err) {
-      console.error(err.stack || err.message);
-    });
-    return Promise.resolve(doc);
-  }
-}
-
 app.get('/files/:id/index.html', function (req, res, next) {
   var id = req.params.id;
-  readDoc(id).done(function (doc) {
-    if (!doc) return next();
-    var styles = doc.stylesheets.map(function (stylesheet) {
-      return '<link rel="stylesheet" href="' + stylesheet + '"></script>';
-    }).join('');
-    var scripts = doc.libraries.map(function (lib) {
-      return '<script src="' + lib + '"></script>';
-    }).join('');
-    // max age = 1 year
-    res.setHeader('cache-control', 'public,max-age=31536000');
-    if (doc.style) {
-      styles += '<link rel="stylesheet" href="' + doc._id + '"></script>';
-    }
-    if (doc.script || doc.body) {
-      scripts += '<script src="/files/' + doc._id + '/index.js"></script>';
-    }
-    var html = doc.html ||
-       '<!DOCTYPE html><html><head>{{styles}}</head><body>{{scripts}}</body></html>';
-    html = html.replace(/\{\{styles\}\}/g, styles);
-    html = html.replace(/\{\{scripts\}\}/g, scripts);
-    res.send(html);
-  }, next);
+  var doc = cache.get(id);
+  if (!doc) return next();
+  var styles = doc.stylesheets.map(function (stylesheet) {
+    return '<link rel="stylesheet" href="' + stylesheet + '"></script>';
+  }).join('');
+  var scripts = doc.libraries.map(function (lib) {
+    return '<script src="' + lib + '"></script>';
+  }).join('');
+  // max age = 1 year
+  res.setHeader('cache-control', 'public,max-age=31536000');
+  if (doc.style) {
+    styles += '<link rel="stylesheet" href="' + doc._id + '"></script>';
+  }
+  if (doc.script || doc.body) {
+    scripts += '<script src="/files/' + doc._id + '/index.js"></script>';
+  }
+  var html = doc.html ||
+      '<!DOCTYPE html><html><head>{{styles}}</head><body>{{scripts}}</body></html>';
+  html = html.replace(/\{\{styles\}\}/g, styles);
+  html = html.replace(/\{\{scripts\}\}/g, scripts);
+  res.send(html);
 });
 app.get('/files/:id/index.js', function (req, res, next) {
   var id = req.params.id;
-  readDoc(id).done(function (doc) {
-    // max age = 1 year
-    res.setHeader('cache-control', 'public,max-age=31536000');
-    res.type('js');
-    res.send(doc.script || doc.body);
-  }, next);
+  var doc = cache.get(id);
+  // max age = 1 year
+  res.setHeader('cache-control', 'public,max-age=31536000');
+  res.type('js');
+  res.send(doc.script || doc.body);
 });
 app.get('/files/:id/index.css', function (req, res, next) {
   var id = req.params.id;
-  readDoc(id).done(function (doc) {
-    // max age = 1 year
-    res.setHeader('cache-control', 'public,max-age=31536000');
-    res.type('css');
-    res.send(doc.style);
-  }, next);
+  var doc = cache.get(id);
+  // max age = 1 year
+  res.setHeader('cache-control', 'public,max-age=31536000');
+  res.type('css');
+  res.send(doc.style);
 });
 app.get('/', function (req, res, next) {
   res.send(create);
@@ -133,46 +102,14 @@ app.post('/create',
   doc.created = now;
   doc.accessed = now;
   doc.count = 0;
-  db.files.update({_id: id}, doc, {upsert: true}).done(function () {
-    cache.set(id, doc);
-    res.send({id: id, path: '/files/' + id + '/index.html'});
-    cleanup();
-  }, next);
+  cache.set(id, doc);
+  res.send({id: id, path: '/files/' + id + '/index.html'});
 });
 app.get('/create.js', browserify(__dirname + '/lib/create.js'));
-
-function cleanup() {
-  // remove docs that aren't in the 100 most recently accessed
-  db.files.find().sort({accessed: -1}).skip(100).then(function (docs) {
-    return Promise.all(docs.map(function (doc) {
-      cache.del(doc._id);
-      return db.files.remove({_id: doc._id});
-    }));
-  }).done(null, function (err) {
-    console.error(err.stack || err.message);
-  });
-  // remvoe docs that were created 24 hours
-  db.files.find({
-    accessed: {
-      $lt: Date.now() - (24 * 60 * 60 * 1000)
-    }
-  }).then(function (docs) {
-    return Promise.all(docs.map(function (doc) {
-      cache.del(doc._id);
-      return db.files.remove({_id: doc._id});
-    }));
-  }).done(null, function (err) {
-    console.error(err.stack || err.message);
-  });
-}
-cleanup();
 
 var server = app.listen(process.env.PORT || 3000);
 module.exports = {
   close: function () {
     server.close();
-    setTimeout(function () {
-      db.close();
-    }, 2000);
   },
 };

@@ -1,13 +1,7 @@
 language: node_js
 
 node_js:
-  - "14.3.0"
-services:
-  - mongodb
-env:
-  - MONGO_DB="mongodb://localhost/tempjs"
-before_script:
-  - sleep 15
+  - "14.5.0"
 
 deploy:
   provider: script
