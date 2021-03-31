@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "14.5.0"
+  - "15.13.0"
 
 deploy:
   provider: script
@@ -9,4 +9,4 @@ deploy:
   script: npm run deploy
   on:
     branch: master
-    node_js: 14.3.0
+    node_js: 15.13.0
